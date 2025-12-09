@@ -1,10 +1,10 @@
 # Deep Learning Final Project: Multi-Object Tracking & Re-Identification
 
 **Authors:** Jim Huynh | Joseph Marinello | Ailing Nan | Kenny Phan
-- **Lead Developer (Faster RCNN and Siamese Network): _Ailing Nan_
-- **Lead Developer (Yolo & Deepsort): _Kenny Phan_
-- **Code Reviewer and Github: _Joseph Marinello_
-- **Lead Document, Validation, and Presentation/Reporting: _Jim Huynh_
+- **Lead Developer (Faster RCNN and Siamese Network):** _Ailing Nan_
+- **Lead Developer (Yolo & Deepsort):** _Kenny Phan_
+- **Code Reviewer and Github:** _Joseph Marinello_
+- **Lead Document, Validation, and Presentation/Reporting:** _Jim Huynh_
 
 ## Project Overview
 
