@@ -1,0 +1,2 @@
+timestamp,seq,model,conf_threshold,mAP,total_gt,total_det,tp,fp,precision_at_conf,recall_at_conf,notes
+2025-12-05 20:10:00,TRAIN_ALL,fasterrcnn_head_finetune,0.7,0.9597320207642295,27007,21962,15139,6823,0.6893270193971405,0.5605583737549524,aug+AdamW+warmup_cos
