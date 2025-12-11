@@ -1,0 +1,2 @@
+Class,Images,Instances,Box-P,Box-R,Box-F1,mAP50,mAP50-95
+pedestrian,1500,27007,0.98893,0.26793,0.42163,0.6296,0.48177
