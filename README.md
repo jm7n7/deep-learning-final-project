@@ -65,6 +65,11 @@ This notebook implements a Siamese Neural Network designed to learn a similarity
 - **Loss Function:** Optimized using Contrastive Loss, penalizing the distance between positive pairs and enforcing a margin between negative pairs.
 - **Goal:** To output a similarity score that helps re-identify objects that re-enter a frame or are occluded.
 
+## 4. Tracker Pipeline (F-RCNN + Siamese)
+
+**Notebook:** `tracker.ipynb`
+
+
 ## Setup & Requirements
 
 ### Datasets
