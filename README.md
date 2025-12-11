@@ -69,6 +69,53 @@ This notebook implements a Siamese Neural Network designed to learn a similarity
 
 **Notebook:** `tracker.ipynb`
 
+This notebook implements a complete multi-object tracking pipeline that combines Faster R-CNN for person detection with a Siamese network for person re-identification. This approach provides robust tracking by leveraging both spatial detection and visual appearance features.
+
+### Key Features:
+
+- **Detection Stage:** Uses a fine-tuned Faster R-CNN model to detect persons in each frame with confidence thresholding (default: 0.7).
+- **Embedding Extraction:** For each detected person, crops the bounding box region, resizes it to 128x64, and extracts a 256-dimensional embedding using the Siamese network.
+- **Data Association:** Matches detections to existing tracks using cosine similarity between embeddings:
+  - Maintains a sliding window of recent embeddings (default: 5 frames) per track for robust matching
+  - Uses average similarity across multiple historical embeddings to handle appearance changes
+  - Associates detections to tracks if similarity exceeds threshold (default: 0.6)
+- **Track Management:**
+  - Creates new tracks for unmatched detections (assumed to be new persons entering the scene)
+  - Updates matched tracks with new embeddings and positions
+  - Removes stale tracks that haven't been seen for a specified number of frames (default: 30 frames)
+- **Output Generation:**
+  - Saves tracking results in MOTChallenge format (frame, id, x, y, w, h, conf, ...)
+  - Generates annotated video with colored bounding boxes and track IDs
+  - Computes evaluation metrics (MOTA, MOTP, IDF1, etc.) if ground truth is available
+
+### Architecture Components:
+
+- **Siamese Network:** Custom CNN architecture with 3 convolutional layers and 2 fully connected layers, trained on Market-1501 dataset for person re-identification.
+- **Faster R-CNN Detector:** Pre-trained on ImageNet and fine-tuned on MOT16 training data for person detection.
+- **MOT16 Dataset Classes:** 
+  - `MOT16TrainDataset`: Loads training sequences with ground truth annotations
+  - `MOT16TestDataset`: Loads test sequences without annotations for inference
+
+### Configuration Parameters:
+
+- `BBOX_SCORE_THRESH`: Minimum confidence for detections (default: 0.7)
+- `MAX_EMBEDDING_HISTORY`: Number of recent embeddings per track (default: 5)
+- `MAX_FRAMES_MISSING`: Maximum frames before track deletion (default: 30)
+- `SIMILARITY_THRESHOLD`: Minimum cosine similarity for association (default: 0.6)
+
+### Output Files:
+
+- **Tracking Results:** `results_FasterRCNN/FasterRCNN_tracker_results.txt` (MOT format)
+- **Visualization Video:** `results_FasterRCNN/tracked_test_video.mp4`
+- **Evaluation Metrics:** `results_FasterRCNN/FasterRCNN_tracker_metrics.csv` (if ground truth available)
+- **Annotated Frames:** `out/` directory with individual frame images
+
+### Usage:
+
+1. Ensure both the Faster R-CNN detector model (`models_FasterRCNN/bbox_detector.pth`) and Siamese network (`siamese_network.pth`) are trained and saved.
+2. Update `PROJECT_PATH` to match your Google Drive directory structure.
+3. Configure paths for model files, test sequence, and output directories in the configuration cell.
+4. Run all cells sequentially to execute the complete tracking pipeline.
 
 ## Setup & Requirements
 
@@ -93,7 +140,12 @@ The following Python libraries are required:
 
 1. Ensure the datasets are uploaded to the specified Google Drive paths.
 2. Mount Google Drive in the Colab notebooks.
-3. Run the notebooks in the following order (independent pipelines):
-   - Run `YOLO_Deepsort.ipynb` for full tracking and metric evaluation.
-   - Run `Faster_RCNN.ipynb` for detection baselines.
-   - Run `SimilarityModel.ipynb` to train the Re-ID feature extractor.
+3. Run the notebooks in the following order:
+   
+   **Training Phase:**
+   - Run `Faster_RCNN.ipynb` to train the person detector (or use pre-trained weights).
+   - Run `SimilarityModel.ipynb` to train the Siamese network for person re-identification.
+   
+   **Tracking Phase (Independent Pipelines):**
+   - Run `YOLO_Deepsort.ipynb` for YOLOv8 + DeepSort tracking pipeline.
+   - Run `tracker.ipynb` for Faster R-CNN + Siamese network tracking pipeline (requires trained models from above).
